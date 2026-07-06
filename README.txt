@@ -40,3 +40,10 @@ MAX_RECORDINGS = <>
 variable
 
 Bird species to gather are listed in the file: dataset/species.txt
+
+
+### IMPORTANT ###
+
+Create a .env file and add your API key in there:
+
+XENO_KEY = "your-cool-xeno-key"
