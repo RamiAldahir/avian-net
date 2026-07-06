@@ -47,8 +47,12 @@ variable
 
 Bird species to gather are listed in the file: dataset/species.txt
 
+________________________________________________________________________
 
 ### IMPORTANT ###
+
+________________________________________________________________________
+
 
 Create a .env file and add your API key in there:
 
