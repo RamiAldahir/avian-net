@@ -1,6 +1,8 @@
----
+________________________________________________________________________
 
 ## SETUP INSTRUCTIONS
+
+________________________________________________________________________
 
 ### 1. Clone the repository
 
@@ -28,8 +30,12 @@ source .venv/bin/activate
 
 pip install -r requirements.txt
 
+________________________________________________________________________
 
 ## DOWNLOADING THE DATASET
+
+________________________________________________________________________
+
 
 To download bird audio recordings from the Xeno-Canto API:
 python dataset/download_xeno.py
