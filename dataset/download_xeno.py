@@ -19,7 +19,7 @@ OUTPUT_DIR = BASE_DIR / "recordings"
 
 COMMERCIAL_ONLY = True
 MAX_RECORDINGS = 2
-REQUEST_DELAY = 1.0
+REQUEST_DELAY = 0.2
 
 COMMERCIAL_LICENSES = {
     "//creativecommons.org/licenses/by/4.0/",
@@ -54,6 +54,7 @@ def search_species(species):
         r = requests.get(url, params=params)
         r.raise_for_status()
         data = r.json()
+        print("Total returned:", len(data["recordings"]))
 
         recordings.extend(data["recordings"])
 
@@ -67,13 +68,20 @@ def search_species(species):
 
 
 def acceptable(record):
-    if record.get("q") not in ("A", "B"):
+    if record.get("q") not in ("A", "B", "C", "D"):
         return False
 
-    if COMMERCIAL_ONLY and record.get("lic") not in COMMERCIAL_LICENSES:
-        return False
+    if not COMMERCIAL_ONLY:
+        return True
 
-    return True
+    lic = (record.get("lic") or "").lower()
+
+    return (
+        "by/4.0" in lic
+        or "by-sa/4.0" in lic
+        or "by/3.0" in lic
+        or "by-sa/3.0" in lic
+    )
 
 
 def download(record, folder: Path):
@@ -84,9 +92,16 @@ def download(record, folder: Path):
     if filename.exists():
         return
 
-    url = "https:" + record["file"]
+    raw_url = record["file"]
 
-    print("Downloading", filename.name)
+    if raw_url.startswith("//"):
+        url = "https:" + raw_url
+    elif raw_url.startswith("http"):
+        url = raw_url
+    else:
+        url = "https://xeno-canto.org" + raw_url
+
+    print("Downloading", url)
 
     r = requests.get(url, timeout=30)
     r.raise_for_status()
@@ -120,4 +135,6 @@ def main():
 
 
 if __name__ == "__main__":
+    species_list = load_species()
+    print("SPECIES LOADED:", species_list)
     main()
