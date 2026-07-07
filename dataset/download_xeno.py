@@ -17,9 +17,9 @@ BASE_DIR = Path(__file__).resolve().parent
 # Save here: dataset/recordings/
 OUTPUT_DIR = BASE_DIR / "recordings"
 
-COMMERCIAL_ONLY = True
-MAX_RECORDINGS = 2
-REQUEST_DELAY = 0.2
+COMMERCIAL_ONLY = False
+MAX_RECORDINGS = 5
+REQUEST_DELAY = 0.1
 
 COMMERCIAL_LICENSES = {
     "//creativecommons.org/licenses/by/4.0/",
@@ -68,7 +68,7 @@ def search_species(species):
 
 
 def acceptable(record):
-    if record.get("q") not in ("A", "B", "C", "D"):
+    if record.get("q") not in ("A", "B"):
         return False
 
     if not COMMERCIAL_ONLY:

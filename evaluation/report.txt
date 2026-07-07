@@ -1,0 +1,28 @@
+                         precision    recall  f1-score   support
+
+    aegithalos_caudatus       0.89      0.99      0.94       103
+    carduelis_carduelis       0.73      1.00      0.85        36
+     certhia_familiaris       0.75      0.92      0.83        13
+        chloris_chloris       0.83      1.00      0.91        40
+       columba_palumbus       0.73      1.00      0.85        30
+          corvus_corone       0.38      1.00      0.55        33
+    cyanistes_caeruleus       0.85      1.00      0.92        79
+      dendrocopos_major       0.64      1.00      0.78        25
+     erithacus_rubecula       0.89      1.00      0.94        42
+      fringilla_coelebs       0.87      0.97      0.92        35
+    garrulus_glandarius       0.95      1.00      0.98        20
+            parus_major       0.97      1.00      0.99        34
+      passer_domesticus       0.86      1.00      0.92       125
+              pica_pica       0.81      0.84      0.82        25
+     prunella_modularis       0.86      1.00      0.93        19
+         sitta_europaea       0.78      0.97      0.87        30
+          spinus_spinus       0.86      1.00      0.92        89
+  streptopelia_decaocto       1.00      0.79      0.89        39
+       sturnus_vulgaris       0.00      0.00      0.00        54
+troglodytes_troglodytes       0.00      0.00      0.00        38
+          turdus_merula       0.00      0.00      0.00        43
+      turdus_philomelos       0.00      0.00      0.00        44
+
+               accuracy                           0.80       996
+              macro avg       0.67      0.79      0.72       996
+           weighted avg       0.68      0.80      0.73       996
