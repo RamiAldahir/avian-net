@@ -13,13 +13,9 @@ from sklearn.metrics import (
 )
 
 import seaborn as sns
-
 import librosa
 
 
-# --------------------------
-# CONFIG
-# --------------------------
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -31,9 +27,6 @@ OUTPUT_DIR = BASE_DIR / "evaluation"
 
 SAMPLE_RATE = 16000
 IMG_SIZE = 128
-
-
-# --------------------------
 
 
 def audio_to_spectrogram(path):

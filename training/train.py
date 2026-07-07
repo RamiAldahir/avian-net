@@ -10,8 +10,6 @@ import numpy as np
 from model import build_model
 
 
-# -------------------------
-
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 DATASET = BASE_DIR / "dataset" / "processed"
@@ -21,8 +19,6 @@ SAMPLE_RATE = 16000
 
 IMG_SIZE = 128
 
-
-# -------------------------
 
 
 def audio_to_spectrogram(path):
@@ -53,7 +49,6 @@ def audio_to_spectrogram(path):
     return mel_db.numpy()
 
 
-
 def load_dataset():
 
     X = []
@@ -81,7 +76,6 @@ def load_dataset():
         for file in folder.glob("*.wav"):
 
             try:
-
                 spec = audio_to_spectrogram(file)
 
                 X.append(spec)
@@ -95,7 +89,6 @@ def load_dataset():
         np.array(y),
         classes
     )
-
 
 
 def main():
