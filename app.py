@@ -14,7 +14,8 @@ from tkinterdnd2 import TkinterDnD, DND_FILES
 BASE_DIR = Path(__file__).resolve().parent
 
 MODEL = BASE_DIR / "models" / "bird_model.tflite"
-LABELS = BASE_DIR / "models" / "labels.txt"
+# LABELS = BASE_DIR / "models" / "labels.txt"
+LABELS = BASE_DIR / "dataset" / "species_commonName.txt"
 
 RATE = 16000
 SECONDS = 5
@@ -61,7 +62,6 @@ def predict(audio):
 
 
 # while True:
-
 #     print("Listening...")
 
 #     recording = sd.rec(
@@ -76,6 +76,7 @@ def predict(audio):
 #     bird, confidence = predict( audio )
 
 #     print( bird, f"{confidence:.2%}" )
+
 
 # Using tkinter to make a simple drag-anddrop GUI for testing with sound files
 def on_drop(event):
@@ -95,9 +96,9 @@ def on_drop(event):
             print("File does not exist.")
             return
 
-        if not file_path.lower().endswith(".mp3") :
-            print("MP3 Files Only!")
-            return
+        # if not file_path.lower().endswith(".mp3") :
+        #     print("MP3 Files Only!")
+        #     return
 
         print("Loading audio...")
 

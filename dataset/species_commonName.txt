@@ -1,22 +1,22 @@
-European robin
-Eurasian blackbird
-Blue tit
-Great tit
-Long-tailed tit
-Wren
-Dunnock
-House sparrow
-Chaffinch
-Goldfinch
-Greenfinch
-Siskin
-Wood pigeon
-Collared dove
-Magpie
-Carrion crow
-Jay
-Nuthatch
-Treecreeper
-Song thrush
-Starling
-Great spotted woodpecker
+aegithalos_caudatus - Long-tailed tit
+carduelis_carduelis - Goldfinch
+certhia_familiaris - Treecreeper
+chloris_chloris - Greenfinch
+columba_palumbus - Wood pigeon
+corvus_corone - Carrion crow
+cyanistes_caeruleus - Blue tit
+dendrocopos_major - Great spotted woodpecker
+erithacus_rubecula - European robin
+fringilla_coelebs - Chaffinch
+garrulus_glandarius - Jay
+parus_major - Great tit
+passer_domesticus - House sparrow
+pica_pica - Magpie
+prunella_modularis - Dunnock
+sitta_europaea - Nuthatch
+spinus_spinus - Siskin
+streptopelia_decaocto - Collared dove
+sturnus_vulgaris - Starling
+troglodytes_troglodytes - Wren
+turdus_merula - Eurasian blackbird
+turdus_philomelos - Song thrush
