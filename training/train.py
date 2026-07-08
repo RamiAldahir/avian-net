@@ -8,6 +8,8 @@ import librosa
 import numpy as np
 
 from model import build_model
+from sklearn.metrics import precision_score, recall_score, f1_score
+from sklearn.model_selection import train_test_split
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -19,32 +21,17 @@ SAMPLE_RATE = 16000
 
 IMG_SIZE = 128
 
+EPOCHS = 30
+
 
 
 def audio_to_spectrogram(path):
 
-    audio, sr = librosa.load(
-        path,
-        sr=SAMPLE_RATE
-    )
-
-    mel = librosa.feature.melspectrogram(
-        y=audio,
-        sr=sr,
-        n_mels=IMG_SIZE
-    )
-
-    mel_db = librosa.power_to_db(
-        mel,
-        ref=np.max
-    )
-
+    audio, sr = librosa.load( path, sr=SAMPLE_RATE )
+    mel = librosa.feature.melspectrogram( y=audio, sr=sr, n_mels=IMG_SIZE )
+    mel_db = librosa.power_to_db( mel, ref=np.max )
     # resize to 128x128
-
-    mel_db = tf.image.resize(
-        mel_db[..., np.newaxis],
-        [IMG_SIZE, IMG_SIZE]
-    )
+    mel_db = tf.image.resize( mel_db[..., np.newaxis], [IMG_SIZE, IMG_SIZE] )
 
     return mel_db.numpy()
 
@@ -90,6 +77,41 @@ def load_dataset():
         classes
     )
 
+class MetricsCallback(tf.keras.callbacks.Callback):
+
+    def __init__(self, validation_data):
+        super().__init__()
+
+        self.validation_data = validation_data
+
+        self.val_precision = []
+        self.val_recall = []
+        self.val_f1 = []
+
+
+    def on_epoch_end(self, epoch, logs=None):
+
+        X_val, y_val = self.validation_data
+
+        predictions = self.model.predict( X_val, verbose=0 )
+
+        predicted_classes = np.argmax( predictions, axis=1 )
+
+        precision = precision_score( y_val, predicted_classes, average="macro", zero_division=0 )
+
+        recall = recall_score( y_val, predicted_classes, average="macro", zero_division=0 )
+
+        f1 = f1_score( y_val, predicted_classes, average="macro", zero_division=0 )
+
+        self.val_precision.append(precision)
+        self.val_recall.append(recall)
+        self.val_f1.append(f1)
+
+        print(
+            f" - val_precision: {precision:.4f}"
+            f" - val_recall: {recall:.4f}"
+            f" - val_f1: {f1:.4f}"
+        )
 
 def main():
 
@@ -101,15 +123,42 @@ def main():
         len(classes)
     )
 
-    history = model.fit(
+    X_train, X_val, y_train, y_val = train_test_split(
         X,
         y,
-        epochs=10,
-        validation_split=0.2,
-        batch_size=32
+        test_size=0.3,
+        random_state=42,
+        stratify=y
     )
 
-    np.save( MODEL_DIR / "history.npy", history.history )
+    metric_callback = MetricsCallback(
+        (
+            X_val,
+            y_val
+        )
+    )
+
+    history = model.fit(
+        X_train,
+        y_train,
+        epochs= EPOCHS,
+        validation_data=(
+            X_val,
+            y_val
+        ),
+        batch_size=16,
+        callbacks=[
+            metric_callback
+        ]
+    )
+
+    history_data = history.history
+
+    history_data["val_precision"] = ( metric_callback.val_precision )
+    history_data["val_recall"] = ( metric_callback.val_recall )
+    history_data["val_f1"] = ( metric_callback.val_f1 )
+
+    np.save( MODEL_DIR / "history.npy", history_data )
 
     model.save( MODEL_DIR / "bird_model.keras" )
 

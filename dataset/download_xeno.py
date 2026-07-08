@@ -15,10 +15,10 @@ API_KEY = os.getenv("XENO_KEY")
 BASE_DIR = Path(__file__).resolve().parent
 
 # Save here: dataset/recordings/
-OUTPUT_DIR = BASE_DIR / "recordings"
+OUTPUT_DIR = BASE_DIR / "testing"
 
 COMMERCIAL_ONLY = False
-MAX_RECORDINGS = 5
+MAX_RECORDINGS = 2
 REQUEST_DELAY = 0.1
 
 COMMERCIAL_LICENSES = {

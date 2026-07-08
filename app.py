@@ -1,5 +1,5 @@
 import os
-os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
 import tensorflow as tf
 import librosa
@@ -7,6 +7,9 @@ import numpy as np
 import sounddevice as sd
 
 from pathlib import Path
+
+import tkinter as tk
+from tkinterdnd2 import TkinterDnD, DND_FILES
 
 BASE_DIR = Path(__file__).resolve().parent
 
@@ -57,20 +60,94 @@ def predict(audio):
     return ( labels[index], output[index] )
 
 
+# while True:
 
-while True:
+#     print("Listening...")
 
-    print("Listening...")
+#     recording = sd.rec(
+#         int(RATE*SECONDS),
+#         samplerate=RATE,
+#         channels=1
+#     )
 
-    recording = sd.rec(
-        int(RATE*SECONDS),
-        samplerate=RATE,
-        channels=1
-    )
+#     sd.wait()
 
-    sd.wait()
+#     audio = recording.flatten()
+#     bird, confidence = predict( audio )
 
-    audio = recording.flatten()
-    bird, confidence = predict( audio )
+#     print( bird, f"{confidence:.2%}" )
 
-    print( bird, f"{confidence:.2%}" )
+# Using tkinter to make a simple drag-anddrop GUI for testing with sound files
+def on_drop(event):
+    try:
+        # Handles filenames with spaces
+        file_path = event.widget.tk.splitlist(event.data)[0]
+
+        # Remove file:// if present
+        if file_path.startswith("file://"):
+            file_path = file_path[7:]
+
+        file_path = os.path.normpath(file_path)
+
+        print(f"File: {file_path}")
+
+        if not os.path.isfile(file_path):
+            print("File does not exist.")
+            return
+
+        if not file_path.lower().endswith(".mp3") :
+            print("MP3 Files Only!")
+            return
+
+        print("Loading audio...")
+
+        audio, _ = librosa.load(
+            file_path,
+            sr=RATE,
+            mono=True
+        )
+
+        expected_samples = RATE * SECONDS
+
+        if len(audio) < expected_samples:
+            audio = np.pad(audio, (0, expected_samples - len(audio)))
+        else:
+            audio = audio[:expected_samples]
+
+        bird, confidence = predict(audio)
+
+        print(f"Prediction: {bird} ({confidence:.2%})")
+
+        label.config(
+            text=f"{os.path.basename(file_path)}\n\n{bird}\n{confidence:.2%}",
+            bg="lightgreen"
+        )
+
+    except Exception as e:
+        print("Error:", e)
+        label.config(text=str(e), bg="red")
+
+
+root = TkinterDnD.Tk()
+root.title("Bird Classifier")
+root.geometry("500x300")
+
+label = tk.Label(
+    root,
+    text="Drag and drop an MP3 file here",
+    font=("Arial", 14),
+    relief="ridge",
+    bd=3,
+    bg="white"
+)
+
+label.pack(fill="both", expand=True, padx=20, pady=20)
+
+# Enable dropping files
+label.drop_target_register(DND_FILES)
+
+label.dnd_bind("<<Drop>>", on_drop)
+label.dnd_bind("<<DragEnter>>", lambda e: label.config(bg="lightgreen"))
+label.dnd_bind("<<DragLeave>>", lambda e: label.config(bg="white"))
+
+root.mainloop()

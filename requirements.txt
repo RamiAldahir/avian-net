@@ -10,3 +10,5 @@ sounddevice
 matplotlib
 scikit-learn
 seaborn
+tk
+tkinterdnd2
