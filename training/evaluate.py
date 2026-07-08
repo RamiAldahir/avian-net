@@ -35,6 +35,8 @@ OUTPUT_DIR = BASE_DIR / "evaluation"
 SAMPLE_RATE = 16000
 IMG_SIZE = 128
 
+SCATTER_SIZE = 15
+
 
 def audio_to_spectrogram(path):
 
@@ -71,20 +73,10 @@ def load_test_data():
     }
 
     for species in classes:
-
-        files = list(
-            (DATASET/species).glob("*.wav")
-        )
-
+        files = list( (DATASET/species).glob("*.wav") )
         for file in files:
-
-            X.append(
-                audio_to_spectrogram(file)
-            )
-
-            y.append(
-                class_map[species]
-            )
+            X.append( audio_to_spectrogram(file) )
+            y.append( class_map[species] )
 
     return (
         np.array(X),
@@ -108,7 +100,7 @@ def plot_history():
         if key not in history:
             return
         plt.figure(figsize=(8,5))
-        plt.scatter( epochs, history[key], s=20 )
+        plt.scatter( epochs, history[key], s=SCATTER_SIZE )
         plt.plot( epochs, history[key], alpha=0.5 )
         plt.title(title)
         plt.xlabel( "Epoch" )
@@ -121,8 +113,10 @@ def plot_history():
 
     # Accuracy
     plt.figure(figsize=(8,5))
-    plt.scatter( epochs, history["accuracy"], label="Training", s=20 )
-    plt.scatter( epochs, history["val_accuracy"], label="Validation", s=20 )
+    plt.scatter( epochs, history["accuracy"], label="Training", s=SCATTER_SIZE )
+    plt.scatter( epochs, history["val_accuracy"], label="Validation", s=SCATTER_SIZE )
+    plt.plot( epochs, history["accuracy"], label="Training", alpha=0.5 )
+    plt.plot( epochs, history["val_accuracy"], label="Validation", alpha=0.5 )
     plt.xlabel("Epoch")
     plt.ylabel("Accuracy")
     plt.title( "Accuracy" )
@@ -135,8 +129,10 @@ def plot_history():
     # Loss
     if "loss" in history:
         plt.figure(figsize=(8,5))
-        plt.scatter( epochs, history["loss"], label="Training", s=20 )
-        plt.scatter( epochs, history["val_loss"], label="Validation", s=20 )
+        plt.scatter( epochs, history["loss"], label="Training", s=SCATTER_SIZE )
+        plt.scatter( epochs, history["val_loss"], label="Validation", s=SCATTER_SIZE )
+        plt.plot( epochs, history["loss"], label="Training", alpha=0.5 )
+        plt.plot( epochs, history["val_loss"], label="Validation", alpha=0.5 )
         plt.xlabel("Epoch")
         plt.ylabel("Loss")
         plt.title( "Loss" )
